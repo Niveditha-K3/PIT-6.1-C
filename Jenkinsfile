@@ -23,16 +23,16 @@ pipeline {
             }
             post {
                 success {
-                    emailext body: Unit and Integration Tests passed successfully
-                    subject: 'Unit and Integration Tests Passed',
-                    mail to: 'kniveditha30@gmail.com',
-                    attachLog: true
+                    mail to: "kniveditha30@gmail.com",
+                     body: "Unit and Integration Tests passed successfully" ,
+                    subject: "Unit and Integration Tests Passed"
+                    
                 }
                 failure {
-                    emailext body: Unit and Integration Tests failed                
-                    subject: 'Unit and Integration Tests Failed',
-                    mail to: 'kniveditha30@gmail.com',
-                    attachLog: true
+                   mail to: "kniveditha30@gmail.com",
+                   body: "Unit and Integration Tests failed" ,               
+                   subject: "Unit and Integration Tests Failed"
+                    
                 }
             }
         }
@@ -53,15 +53,15 @@ pipeline {
             }
             post {
                 success {
-                    emailext body: Security Scan passed successfully.
-                    subject: 'Security Scan Passed',
-                   mail to: 'kniveditha30@gmail.com',
+                      mail to: "kniveditha30@gmail.com",
+                      body: "Security Scan passed successfully" ,
+                    subject: "Security Scan Passed",
                     attachLog: true
                 }
                 failure {
-                    emailext body: Security Scan failed.
-                    subject: 'Security Scan Failed',
-                    mail to: 'kniveditha30@gmail.com',
+                    mail to: "kniveditha30@gmail.com",
+                     body: "Security Scan failed",
+                    subject: "Security Scan Failed",
                     attachLog: true
                 }
             }
