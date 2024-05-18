@@ -1,23 +1,38 @@
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
-                echo 'Building'
-               
+                echo 'Compiling the code with Maven'
+                
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit and integration tests'
+                echo 'Executing unit tests...'
                 
+                echo 'Executing integration tests'
+                
+            }
+            post {
+                success {
+                    emailext attachLog: true,
+                    body: 'Unit and integration tests completed successfully.',
+                    subject: 'Tests Passed',
+                    to: 'kondraniveditha@gmail.com'
+                }
+                failure {
+                    emailext attachLog: true,
+                    body: 'Unit and integration tests failed.',
+                    subject: 'Tests Failed',
+                    to: 'kondraniveditha@gmail.com'
+                }
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Performing code analysis'
-                
+                echo 'Conducting code analysis with SonarQube'
+               
             }
         }
         stage('Security Scan') {
@@ -25,34 +40,37 @@ pipeline {
                 echo 'Running security scan'
                
             }
+            post {
+                success {
+                    emailext attachLog: true,
+                    body: 'Security scan completed successfully.',
+                    subject: 'Security Scan Passed',
+                    to: 'kondraniveditha@gmail.com'
+                }
+                failure {
+                    emailext attachLog: true,
+                    body: 'Security vulnerabilities detected.',
+                    subject: 'Security Scan Failed',
+                    to: 'kondraniveditha@gmail.com'
+                }
+            }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to staging'
+                echo 'Deploying application to staging server'
                 
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on staging'
-               
+                echo 'Performing integration tests in staging environment'
+              
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying to production'
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                def log = currentBuild.rawBuild.getLog(100).join('\n')
-                mail to: 'kondraniveditha@gmail.com',
-                    subject: "Pipeline ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
-                    body: "Pipeline ${currentBuild.fullDisplayName} finished with status: ${currentBuild.currentResult}\n\nLogs:\n${log}",
-                    mimeType: 'text/plain'
+                echo 'Deploying application to production server'
+               
             }
         }
     }
