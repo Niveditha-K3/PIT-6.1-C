@@ -5,13 +5,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building'
-                
+               
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests'
-               
+                
             }
         }
         stage('Code Analysis') {
@@ -23,7 +23,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Running security scan'
-                
+               
             }
         }
         stage('Deploy to Staging') {
@@ -35,23 +35,25 @@ pipeline {
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging'
-                
+               
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to production'
-               
             }
         }
     }
 
     post {
         always {
-            mail to: 'kondraniveditha@gmail.com',
-                subject: "Pipeline ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
-                body: "Pipeline ${currentBuild.fullDisplayName} finished with status: ${currentBuild.currentResult}\nSee console output at ${env.BUILD_URL}",
-                attachLog: true
+            script {
+                def log = currentBuild.rawBuild.getLog(100).join('\n')
+                mail to: 'kondraniveditha@gmail.com',
+                    subject: "Pipeline ${currentBuild.fullDisplayName} - ${currentBuild.currentResult}",
+                    body: "Pipeline ${currentBuild.fullDisplayName} finished with status: ${currentBuild.currentResult}\n\nLogs:\n${log}",
+                    mimeType: 'text/plain'
+            }
         }
     }
 }
